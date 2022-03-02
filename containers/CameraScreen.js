@@ -22,13 +22,18 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 
-export default function CameraScreen({ setStoredId }) {
+export default function CameraScreen() {
   const navigation = useNavigation();
   const [permission, setPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
   const [id, setId] = useState("Not scanned yet");
   const [data, setData] = useState();
   const [modal, setModal] = useState(false);
+
+  const handleGoBack = () => {
+    setModal(false);
+    setScanned(false);
+  };
 
   const getCameraPermission = () => {
     (async () => {
@@ -46,9 +51,7 @@ export default function CameraScreen({ setStoredId }) {
   const handleBarCodeScanned = async ({ type, data }) => {
     setScanned(true);
     setId(data);
-    // console.log("type===>", type);
-    // console.log("id===>", data + type);
-    // ********* c'est ici qu'on fait la requete
+
     try {
       //   const response = await axios.get(`http://localhost:3000/products/${id}`);
       const response = await axios.get(
@@ -59,13 +62,13 @@ export default function CameraScreen({ setStoredId }) {
       setModal(true);
       console.log(" NEW LOG 2 ===>", response.data.product._id);
       if (response.data.product._id) {
-        setStoredId(data.product._id);
-      }
-      if (response.data.product._id) {
+        //la il faudra aussi stocker response.data.product.image_front_small_url & response.data.product.product_name_fr
         const storedId = response.data.product._id;
         await AsyncStorage.setItem("storedId", storedId);
-        console.log("storedId==>", storedId);
+        // console.log("storedId==>", storedId);
       }
+      const value = await AsyncStorage.getItem("storedId");
+      console.log("value / storedId==>", value);
     } catch (error) {
       console.log(error.message);
     }
@@ -101,7 +104,7 @@ export default function CameraScreen({ setStoredId }) {
       <View style={styles.bareCodeBox}>
         <BarCodeScanner
           onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-          style={{ height: 400, width: 400 }}
+          style={styles.scanner}
         />
       </View>
 
@@ -150,7 +153,7 @@ export default function CameraScreen({ setStoredId }) {
                       name="back"
                       size={40}
                       color="black"
-                      onPress={() => setModal(false)}
+                      onPress={handleGoBack}
                       color="tomato"
                     />
                   )}
@@ -174,13 +177,17 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   bareCodeBox: {
-    alignItems: "center",
-    justifyContent: "center",
-    height: "80%",
+    // alignItems: "center",
+    // justifyContent: "center",
+    // height: "80%",
     width: width,
     overflow: "hidden",
-    borderRadius: 30,
+    // borderRadius: 30,
     // backgroundColor: "red",
+  },
+  scanner: {
+    height: height,
+    width: width,
   },
   modalBlock: {
     marginTop: "130%",

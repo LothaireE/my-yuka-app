@@ -52,7 +52,7 @@ export default function App() {
                 {() => (
                   <Stack.Navigator>
                     <Stack.Screen name="Products" component={ProductsScreen}>
-                      {() => <ProductsScreen />}
+                      {/* {() => <ProductsScreen />} */}
                     </Stack.Screen>
                     {/* {() => <ProductScreen />} */}
                     {/* </Stack.Screen> */}
