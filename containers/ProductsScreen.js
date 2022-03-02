@@ -22,15 +22,37 @@ const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 
 export default function ProductsScreen() {
-  // const value = await AsyncStorage.getItem("storedId");
-  // console.log("value / storedId==>", value);
-  return (
+  const [isLoading, setIsLoading] = useState(true);
+  const [productInfos, setProductInfos] = useState();
+  console.log("productInfos vol 2 ===>", productInfos);
+  useEffect(() => {
+    const getProductInfos = async () => {
+      const infosValue = await AsyncStorage.getItem("product");
+      const product = JSON.parse(infosValue);
+      setProductInfos([product]);
+      setIsLoading(false);
+    };
+    getProductInfos();
+  }, []);
+
+  return isLoading ? (
+    <View>
+      <ActivityIndicator />
+    </View>
+  ) : (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollArea}>
         <View
         // style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
         >
-          <Text>ProductsScreen</Text>
+          {/* <Text>ProductsScreen : {productInfos.product_name} </Text>
+          <Text>ProductsId: {productInfos._id}</Text> */}
+
+          <Text>ça va le faire </Text>
+          {/* <Text>id : {productInfos._id}</Text>
+          <Text>name : {productInfos.product_name} </Text>
+          <Text>pic : {productInfos.product_brand}</Text>
+          <Text>brand : {productInfos.product_picture}</Text> */}
         </View>
       </ScrollView>
       <StatusBar style="light" />

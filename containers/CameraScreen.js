@@ -47,6 +47,12 @@ export default function CameraScreen() {
     getCameraPermission();
   }, []);
 
+  useEffect(() => {
+    return () => {
+      alert("TESTTTT !");
+    };
+  });
+
   //ce qu'il se passe une fois autorisé
   const handleBarCodeScanned = async ({ type, data }) => {
     setScanned(true);
@@ -60,15 +66,25 @@ export default function CameraScreen() {
 
       setData(response.data);
       setModal(true);
-      console.log(" NEW LOG 2 ===>", response.data.product._id);
-      if (response.data.product._id) {
-        //la il faudra aussi stocker response.data.product.image_front_small_url & response.data.product.product_name_fr
-        const storedId = response.data.product._id;
-        await AsyncStorage.setItem("storedId", storedId);
-        // console.log("storedId==>", storedId);
-      }
-      const value = await AsyncStorage.getItem("storedId");
-      console.log("value / storedId==>", value);
+      //   console.log(" NEW LOG 2 ===>", response.data.product._id);
+
+      const setProductInfos = async (infos) => {
+        try {
+          await AsyncStorage.setItem("product", infos);
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      const infosValue = JSON.stringify({
+        _id: response.data.product._id,
+        product_picture: response.data.product.image_front_small_url,
+        product_name: response.data.product.product_name_fr,
+        product_brand: response.data.product.brands,
+      });
+      setProductInfos(infosValue);
+
+      //   const infosValue = await AsyncStorage.getItem("product");
+      //   console.log("infosValue==>", infosValue);
     } catch (error) {
       console.log(error.message);
     }
