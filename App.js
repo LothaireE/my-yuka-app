@@ -35,12 +35,14 @@ export default function App() {
               >
                 {() => (
                   <Stack.Navigator>
-                    <Stack.Screen name="Camera">
-                      {() => <CameraScreen />}
-                    </Stack.Screen>
+                    <Stack.Screen name="Camera" component={CameraScreen} />
+                    {/* {() => <CameraScreen />} */}
+                    {/* </Stack.Screen> */}
                   </Stack.Navigator>
                 )}
               </Tab.Screen>
+              <Stack.Screen name="Product" component={ProductScreen} />
+
               <Tab.Screen
                 name="TabProducts"
                 options={{
@@ -49,9 +51,11 @@ export default function App() {
               >
                 {() => (
                   <Stack.Navigator>
-                    <Stack.Screen name="Products">
+                    <Stack.Screen name="Products" component={ProductsScreen}>
                       {() => <ProductsScreen />}
                     </Stack.Screen>
+                    {/* {() => <ProductScreen />} */}
+                    {/* </Stack.Screen> */}
                   </Stack.Navigator>
                 )}
               </Tab.Screen>
