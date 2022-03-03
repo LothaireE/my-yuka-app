@@ -18,6 +18,8 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
+        {/* <Stack.Screen name="Product" component={ProductScreen} /> */}
+
         <Stack.Screen name="Tab" options={{ headerShown: false }}>
           {() => (
             <Tab.Navigator
@@ -25,23 +27,32 @@ export default function App() {
                 headerShown: false,
                 tabBarActiveTintColor: "tomato",
                 tabBarInactiveTintColor: "gray",
+                unmountOnBlur: true,
               }}
             >
               <Tab.Screen
                 name="TabCamera"
                 options={{
                   tabBarLabel: "Camera",
+                  unmountOnBlur: true,
                 }}
               >
                 {() => (
                   <Stack.Navigator>
-                    <Stack.Screen name="Camera" component={CameraScreen} />
+                    <Stack.Screen
+                      name="Camera"
+                      options={{
+                        unmountOnBlur: true,
+                      }}
+                      component={CameraScreen}
+                    />
                     {/* {() => <CameraScreen />} */}
                     {/* </Stack.Screen> */}
+                    <Stack.Screen name="Product" component={ProductScreen} />
                   </Stack.Navigator>
                 )}
               </Tab.Screen>
-              <Stack.Screen name="Product" component={ProductScreen} />
+              {/* <Stack.Screen name="Product" component={ProductScreen} /> */}
 
               <Tab.Screen
                 name="TabProducts"

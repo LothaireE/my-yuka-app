@@ -14,6 +14,7 @@ import React, { useState, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
 import * as ImagePicker from "expo-image-picker";
 import { BarCodeScanner } from "expo-barcode-scanner";
+
 import axios from "axios";
 import { Ionicons, AntDesign } from "@expo/vector-icons";
 import { useNavigation, useRoute } from "@react-navigation/core";
@@ -30,14 +31,15 @@ export default function CameraScreen() {
   const [data, setData] = useState();
   const [modal, setModal] = useState(false);
 
-  const handleGoBack = () => {
-    setModal(false);
-    setScanned(false);
-  };
+  //   const handleGoBack = () => {
+  //     setModal(false);
+  //     setScanned(false);
+  //   };
 
   const getCameraPermission = () => {
     (async () => {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
+      //   const { status } = await Camera.requestPermissionsAsync();
       setPermission(status === `granted`);
     })();
   };
@@ -46,12 +48,6 @@ export default function CameraScreen() {
   useEffect(() => {
     getCameraPermission();
   }, []);
-
-  useEffect(() => {
-    return () => {
-      alert("TESTTTT !");
-    };
-  });
 
   //ce qu'il se passe une fois autorisé
   const handleBarCodeScanned = async ({ type, data }) => {
@@ -66,25 +62,61 @@ export default function CameraScreen() {
 
       setData(response.data);
       setModal(true);
-      //   console.log(" NEW LOG 2 ===>", response.data.product._id);
 
-      const setProductInfos = async (infos) => {
-        try {
-          await AsyncStorage.setItem("product", infos);
-        } catch (error) {
-          console.log(error);
+      const historyTabExist = await AsyncStorage.getItem("products");
+
+      if (historyTabExist === null) {
+        const newHistoryTab = [];
+        newHistoryTab.unshift({
+          _id: response.data.product._id,
+          product_picture: response.data.product.image_front_small_url,
+          product_name: response.data.product.product_name_fr,
+          product_brand: response.data.product.brands,
+        });
+        const newHistoryTabToString = JSON.stringify(newHistoryTab);
+        await AsyncStorage.setItem("products", newHistoryTabToString);
+      } else {
+        const callHistory = await AsyncStorage.getItem("products");
+        const rebuiltHistory = JSON.parse(callHistory);
+        console.log("checkProducts 3 ==>", rebuiltHistory);
+
+        if (rebuiltHistory.indexOf() === -1) {
+          const historyTab = JSON.parse(historyTabExist);
+          historyTab.push({
+            _id: response.data.product._id,
+            product_picture: response.data.product.image_front_small_url,
+            product_name: response.data.product.product_name_fr,
+            product_brand: response.data.product.brands,
+          });
+          const historyTabToString = JSON.stringify(historyTab);
+          await AsyncStorage.setItem("products", historyTabToString);
         }
-      };
-      const infosValue = JSON.stringify({
-        _id: response.data.product._id,
-        product_picture: response.data.product.image_front_small_url,
-        product_name: response.data.product.product_name_fr,
-        product_brand: response.data.product.brands,
-      });
-      setProductInfos(infosValue);
+      }
 
-      //   const infosValue = await AsyncStorage.getItem("product");
-      //   console.log("infosValue==>", infosValue);
+      //   if (historyTabExist) {
+      //     const historyTab = JSON.parse(historyTabExist);
+      //     historyTab.push({
+      //       _id: response.data.product._id,
+      //       product_picture: response.data.product.image_front_small_url,
+      //       product_name: response.data.product.product_name_fr,
+      //       product_brand: response.data.product.brands,
+      //     });
+      //     const historyTabToString = JSON.stringify(historyTab);
+      //     await AsyncStorage.setItem("products", historyTabToString);
+      //   } else {
+      //     const newHistoryTab = [];
+      //     newHistoryTab.unshift({
+      //       _id: response.data.product._id,
+      //       product_picture: response.data.product.image_front_small_url,
+      //       product_name: response.data.product.product_name_fr,
+      //       product_brand: response.data.product.brands,
+      //     });
+      //     const newHistoryTabToString = JSON.stringify(newHistoryTab);
+      //     await AsyncStorage.setItem("products", newHistoryTabToString);
+      //   }
+      const logOfProducts = await AsyncStorage.getItem("products");
+      //   console.log("logOfProducts ==>", logOfProducts);
+      //   console.log("logOfProducts.parse ==>", JSON.parse(logOfProducts));
     } catch (error) {
       console.log(error.message);
     }
@@ -118,6 +150,10 @@ export default function CameraScreen() {
     <SafeAreaView style={styles.container}>
       {/* <Text>CameraScreen</Text> */}
       <View style={styles.bareCodeBox}>
+        {/* <Camera
+          onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+          style={styles.scanner}
+        /> */}
         <BarCodeScanner
           onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
           style={styles.scanner}
@@ -126,17 +162,16 @@ export default function CameraScreen() {
 
       <Text>{id}</Text>
 
-      {scanned && (
+      {/* {scanned && (
         <Button
           title={"Scan again?"}
           onPress={() => setScanned(false)}
           color="tomato"
         />
-      )}
-
-      <Modal visible={modal} transparent={true} statusBarTranslucent={true}>
-        <SafeAreaView style={styles.modalBlock}>
-          {data && (
+      )} */}
+      {data && (
+        <Modal visible={modal} transparent={true} statusBarTranslucent={true}>
+          <SafeAreaView style={styles.modalBlock}>
             <View style={styles.productBlock}>
               <TouchableOpacity
                 onPress={() => {
@@ -169,17 +204,32 @@ export default function CameraScreen() {
                       name="back"
                       size={40}
                       color="black"
-                      onPress={handleGoBack}
+                      //   onPress={handleGoBack}
+                      onPress={() => {
+                        setScanned(false);
+                        setModal(false);
+                      }}
                       color="tomato"
                     />
                   )}
                 </View>
+                <View>
+                  <TouchableOpacity
+                    title="removeStorage"
+                    onPress={async () => {
+                      await AsyncStorage.removeItem("products");
+
+                      console.log("removeStorage");
+                    }}
+                  >
+                    <Text>removeStorage</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
-          )}
-          {/* <Text>{data.product._id}</Text> */}
-        </SafeAreaView>
-      </Modal>
+          </SafeAreaView>
+        </Modal>
+      )}
     </SafeAreaView>
   );
 }
@@ -202,7 +252,7 @@ const styles = StyleSheet.create({
     // backgroundColor: "red",
   },
   scanner: {
-    height: height,
+    height: 400,
     width: width,
   },
   modalBlock: {

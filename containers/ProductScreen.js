@@ -9,6 +9,7 @@ import {
   Platform,
   ScrollView,
   FlatList,
+  TouchableOpacity,
 } from "react-native";
 import { useRoute } from "@react-navigation/core";
 import { useEffect, useState } from "react";
@@ -20,7 +21,7 @@ import { Entypo } from "@expo/vector-icons";
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 
-export default function ProductScreen() {
+export default function ProductScreen({ navigation }) {
   const { params } = useRoute();
   const id = params.id;
   // console.log("id en params ===>", params);
@@ -136,6 +137,14 @@ export default function ProductScreen() {
           <Text>Sucre</Text>
           <Text>{data.product.nutriscore_data.sugars}</Text>
         </View>
+
+        <TouchableOpacity
+          style={styles.goBackBtn}
+          title="Go back"
+          onPress={() => navigation.goBack()}
+        >
+          <Text style={styles.goBackBtnText}>Retour</Text>
+        </TouchableOpacity>
       </View>
 
       <StatusBar style="light" />
@@ -203,6 +212,12 @@ const styles = StyleSheet.create({
     height: 120,
     width: 100,
     // backgroundColor: "chartreuse",
+  },
+  goBackBtn: {
+    borderWidth: 2,
+  },
+  goBackBtnText: {
+    fontSize: 20,
   },
 });
 

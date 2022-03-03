@@ -25,11 +25,15 @@ export default function ProductsScreen() {
   const [isLoading, setIsLoading] = useState(true);
   const [productInfos, setProductInfos] = useState();
   console.log("productInfos vol 2 ===>", productInfos);
+
   useEffect(() => {
     const getProductInfos = async () => {
-      const infosValue = await AsyncStorage.getItem("product");
-      const product = JSON.parse(infosValue);
-      setProductInfos([product]);
+      const infosValue = await AsyncStorage.getItem("products");
+      console.log("infosValue==>", infosValue);
+      const products = JSON.parse(infosValue);
+      console.log("products===>", products);
+      setProductInfos(products);
+
       setIsLoading(false);
     };
     getProductInfos();
@@ -41,20 +45,26 @@ export default function ProductsScreen() {
     </View>
   ) : (
     <SafeAreaView style={styles.container}>
-      <ScrollView style={styles.scrollArea}>
-        <View
-        // style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
-        >
-          {/* <Text>ProductsScreen : {productInfos.product_name} </Text>
-          <Text>ProductsId: {productInfos._id}</Text> */}
-
-          <Text>ça va le faire </Text>
-          {/* <Text>id : {productInfos._id}</Text>
-          <Text>name : {productInfos.product_name} </Text>
-          <Text>pic : {productInfos.product_brand}</Text>
-          <Text>brand : {productInfos.product_picture}</Text> */}
+      <View style={styles.scrollArea}>
+        <View>
+          <FlatList
+            data={productInfos}
+            keyExtractor={(item) => item}
+            // à decommenter lorsque ma condition isHistoryExit don't push
+            // keyExtractor={(item) => item._id}
+            renderItem={({ item }) => {
+              console.log("item==>", item);
+              return (
+                <View>
+                  <Text>{item.product_brand}</Text>
+                  <Text>{item.product_name}</Text>
+                  <Text>{item._id}</Text>
+                </View>
+              );
+            }}
+          />
         </View>
-      </ScrollView>
+      </View>
       <StatusBar style="light" />
     </SafeAreaView>
   );
