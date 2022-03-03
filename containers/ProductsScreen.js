@@ -29,9 +29,9 @@ export default function ProductsScreen() {
   useEffect(() => {
     const getProductInfos = async () => {
       const infosValue = await AsyncStorage.getItem("products");
-      console.log("infosValue==>", infosValue);
+      // console.log("infosValue==>", infosValue);
       const products = JSON.parse(infosValue);
-      console.log("products===>", products);
+      // console.log("products===>", products);
       setProductInfos(products);
 
       setIsLoading(false);

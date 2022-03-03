@@ -78,19 +78,33 @@ export default function CameraScreen() {
       } else {
         const callHistory = await AsyncStorage.getItem("products");
         const rebuiltHistory = JSON.parse(callHistory);
-        console.log("checkProducts 3 ==>", rebuiltHistory);
 
-        if (rebuiltHistory.indexOf() === -1) {
-          const historyTab = JSON.parse(historyTabExist);
-          historyTab.push({
-            _id: response.data.product._id,
-            product_picture: response.data.product.image_front_small_url,
-            product_name: response.data.product.product_name_fr,
-            product_brand: response.data.product.brands,
-          });
-          const historyTabToString = JSON.stringify(historyTab);
-          await AsyncStorage.setItem("products", historyTabToString);
+        for (let i = 0; i < rebuiltHistory.length; i++) {
+          const element = rebuiltHistory[i];
+          console.log("element==>", element);
         }
+
+        console.log("checkProducts 1==>", rebuiltHistory.indexOf(Object));
+        // const checkHistory = rebuiltHistory.Object.indexOf();
+
+        // console.log("checkHistory ==>", checkHistory);
+
+        // if (rebuiltHistory.indexOf() === -1) {
+        // if (rebuiltHistory.indexOf() === -1) {
+
+        const historyTab = JSON.parse(historyTabExist);
+        historyTab.unshift({
+          _id: response.data.product._id,
+          product_picture: response.data.product.image_front_small_url,
+          product_name: response.data.product.product_name_fr,
+          product_brand: response.data.product.brands,
+        });
+
+        const historyTabToString = JSON.stringify(historyTab);
+        await AsyncStorage.setItem("products", historyTabToString);
+        // } else {
+        //   console.log("product already saved");
+        // }
       }
 
       //   if (historyTabExist) {
@@ -114,7 +128,7 @@ export default function CameraScreen() {
       //     const newHistoryTabToString = JSON.stringify(newHistoryTab);
       //     await AsyncStorage.setItem("products", newHistoryTabToString);
       //   }
-      const logOfProducts = await AsyncStorage.getItem("products");
+      //   const logOfProducts = await AsyncStorage.getItem("products");
       //   console.log("logOfProducts ==>", logOfProducts);
       //   console.log("logOfProducts.parse ==>", JSON.parse(logOfProducts));
     } catch (error) {
