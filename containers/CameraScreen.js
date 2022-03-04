@@ -78,59 +78,37 @@ export default function CameraScreen() {
       } else {
         const callHistory = await AsyncStorage.getItem("products");
         const rebuiltHistory = JSON.parse(callHistory);
+        // console.log("rebuiltHistory==>", rebuiltHistory);
 
-        for (let i = 0; i < rebuiltHistory.length; i++) {
-          const element = rebuiltHistory[i];
-          console.log("element==>", element);
-        }
+        const idFound = rebuiltHistory.find((product) => {
+          //   console.log(" product==>", product._id);
 
-        console.log("checkProducts 1==>", rebuiltHistory.indexOf(Object));
-        // const checkHistory = rebuiltHistory.Object.indexOf();
-
-        // console.log("checkHistory ==>", checkHistory);
-
-        // if (rebuiltHistory.indexOf() === -1) {
-        // if (rebuiltHistory.indexOf() === -1) {
-
-        const historyTab = JSON.parse(historyTabExist);
-        historyTab.unshift({
-          _id: response.data.product._id,
-          product_picture: response.data.product.image_front_small_url,
-          product_name: response.data.product.product_name_fr,
-          product_brand: response.data.product.brands,
+          if (response.data.product._id === product._id) {
+            // console.log("already here");
+            return true;
+          } else {
+            // console.log("new entry");
+            return false;
+          }
         });
+        console.log("idFound", idFound);
 
-        const historyTabToString = JSON.stringify(historyTab);
-        await AsyncStorage.setItem("products", historyTabToString);
-        // } else {
-        //   console.log("product already saved");
-        // }
+        if (idFound) {
+          console.log("product already registered");
+        } else {
+          console.log("new entry");
+          const historyTab = JSON.parse(historyTabExist);
+          historyTab.unshift({
+            _id: response.data.product._id,
+            product_picture: response.data.product.image_front_small_url,
+            product_name: response.data.product.product_name_fr,
+            product_brand: response.data.product.brands,
+          });
+
+          const historyTabToString = JSON.stringify(historyTab);
+          await AsyncStorage.setItem("products", historyTabToString);
+        }
       }
-
-      //   if (historyTabExist) {
-      //     const historyTab = JSON.parse(historyTabExist);
-      //     historyTab.push({
-      //       _id: response.data.product._id,
-      //       product_picture: response.data.product.image_front_small_url,
-      //       product_name: response.data.product.product_name_fr,
-      //       product_brand: response.data.product.brands,
-      //     });
-      //     const historyTabToString = JSON.stringify(historyTab);
-      //     await AsyncStorage.setItem("products", historyTabToString);
-      //   } else {
-      //     const newHistoryTab = [];
-      //     newHistoryTab.unshift({
-      //       _id: response.data.product._id,
-      //       product_picture: response.data.product.image_front_small_url,
-      //       product_name: response.data.product.product_name_fr,
-      //       product_brand: response.data.product.brands,
-      //     });
-      //     const newHistoryTabToString = JSON.stringify(newHistoryTab);
-      //     await AsyncStorage.setItem("products", newHistoryTabToString);
-      //   }
-      //   const logOfProducts = await AsyncStorage.getItem("products");
-      //   console.log("logOfProducts ==>", logOfProducts);
-      //   console.log("logOfProducts.parse ==>", JSON.parse(logOfProducts));
     } catch (error) {
       console.log(error.message);
     }
@@ -227,7 +205,7 @@ export default function CameraScreen() {
                     />
                   )}
                 </View>
-                <View>
+                {/* <View>
                   <TouchableOpacity
                     title="removeStorage"
                     onPress={async () => {
@@ -238,7 +216,7 @@ export default function CameraScreen() {
                   >
                     <Text>removeStorage</Text>
                   </TouchableOpacity>
-                </View>
+                </View> */}
               </View>
             </View>
           </SafeAreaView>
