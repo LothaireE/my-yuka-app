@@ -27,6 +27,10 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { borderColor } from "react-native/Libraries/Components/View/ReactNativeStyleAttributes";
 import NutriScore from "../components/NutriScore";
 import ProteinsScore from "../components/ProteinsScore";
+import FibersScore from "../components/FibersScore";
+import EnergiesScore from "../components/EnergiesScore";
+import SaturatedFatsScore from "../components/SaturatedFatsScore";
+import SugarScore from "../components/SugarScore";
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 
@@ -90,10 +94,6 @@ export default function ProductScreen({ navigation }) {
       );
       setData(response.data);
       setIsLoading(false);
-      // console.log(
-      //   "data.nutriscore_grade ==>",
-      //   response.data.product.nutriments
-      // );
     };
 
     fetchData();
@@ -163,9 +163,8 @@ export default function ProductScreen({ navigation }) {
               <View style={styles.nutrimentSubBlock}>
                 <Text style={styles.nutriment}>Protéines </Text>
                 <View style={styles.nutrimentValue}>
-                  {/* {data.product.nutriscore_data.proteins} */}
                   <ProteinsScore
-                    proteins={data.product.nutriscore_data.proteins}
+                    proteinNote={data.product.nutriscore_data.proteins}
                   />
                 </View>
               </View>
@@ -183,9 +182,9 @@ export default function ProductScreen({ navigation }) {
               />
               <View style={styles.nutrimentSubBlock}>
                 <Text style={styles.nutriment}>Fibres </Text>
-                <Text style={styles.nutrimentValue}>
-                  {data.product.nutriscore_data.fiber}
-                </Text>
+                <View style={styles.nutrimentValue}>
+                  <FibersScore fiberNote={data.product.nutriscore_data.fiber} />
+                </View>
               </View>
             </View>
           ) : (
@@ -197,9 +196,11 @@ export default function ProductScreen({ navigation }) {
               <Octicons style={styles.nutriIcon} name="flame" size={24} />
               <View style={styles.nutrimentSubBlock}>
                 <Text style={styles.nutriment}>Calories </Text>
-                <Text style={styles.nutrimentValue}>
-                  {data.product.nutriscore_data.energy}
-                </Text>
+                <View style={styles.nutrimentValue}>
+                  <EnergiesScore
+                    energieNote={data.product.nutriscore_data.energy}
+                  />
+                </View>
               </View>
             </View>
           ) : (
@@ -211,9 +212,13 @@ export default function ProductScreen({ navigation }) {
               <Fontisto style={styles.nutriIcon} name="blood-drop" size={24} />
               <View style={styles.nutrimentSubBlock}>
                 <Text style={styles.nutriment}>Graisses saturées </Text>
-                <Text style={styles.nutrimentValue}>
-                  {data.product.nutriscore_data.saturated_fat}
-                </Text>
+                <View style={styles.nutrimentValue}>
+                  <SaturatedFatsScore
+                    saturatedFatsNote={
+                      data.product.nutriscore_data.saturated_fat
+                    }
+                  />
+                </View>
               </View>
             </View>
           ) : (
@@ -229,9 +234,10 @@ export default function ProductScreen({ navigation }) {
               />
               <View style={styles.nutrimentSubBlock}>
                 <Text style={styles.nutriment}>Sucre </Text>
-                <Text style={styles.nutrimentValue}>
-                  {data.product.nutriscore_data.sugars}
-                </Text>
+                <View style={styles.nutrimentValue}>
+                  {/* {data.product.nutriscore_data.sugars} */}
+                  <SugarScore sugarNote={data.product.nutriscore_data.sugars} />
+                </View>
               </View>
             </View>
           ) : (
@@ -269,7 +275,7 @@ const styles = StyleSheet.create({
   },
   productBlock: {
     height: height,
-    // width: width,
+    width: "95%",
     // borderWidth: 3,
     // borderColor: "red",
   },
@@ -390,13 +396,3 @@ const styles = StyleSheet.create({
     color: "white",
   },
 });
-
-// {scanned && (
-//   <AntDesign
-//     name="back"
-//     size={40}
-//     color="black"
-//     onPress={() => setModal(false)}
-//     color="tomato"
-//   />
-// )}

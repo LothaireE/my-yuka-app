@@ -19,6 +19,7 @@ import axios from "axios";
 import { Ionicons, AntDesign } from "@expo/vector-icons";
 import { useNavigation, useRoute } from "@react-navigation/core";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import NutriScore from "../components/NutriScore";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -170,6 +171,20 @@ export default function CameraScreen() {
           statusBarTranslucent={true}
         >
           <SafeAreaView style={styles.modalBlock}>
+            {scanned && (
+              <View style={styles.hideModal}>
+                <Ionicons
+                  name="remove-outline"
+                  size={30}
+                  color="#757575"
+                  onPress={() => {
+                    setScanned(false);
+                    setModal(false);
+                  }}
+                />
+              </View>
+            )}
+
             <View style={styles.productBlock}>
               <TouchableOpacity
                 onPress={() => {
@@ -196,33 +211,8 @@ export default function CameraScreen() {
                 </View>
 
                 <View style={styles.scoreBlock}>
-                  <Text>scoreBlock</Text>
-                  {scanned && (
-                    <AntDesign
-                      name="back"
-                      size={40}
-                      color="black"
-                      //   onPress={handleGoBack}
-                      onPress={() => {
-                        setScanned(false);
-                        setModal(false);
-                      }}
-                      color="tomato"
-                    />
-                  )}
+                  <NutriScore nutriscore={data.product.nutriments} />
                 </View>
-                {/* <View>
-                  <TouchableOpacity
-                    title="removeStorage"
-                    onPress={async () => {
-                      await AsyncStorage.removeItem("products");
-
-                      console.log("removeStorage");
-                    }}
-                  >
-                    <Text>removeStorage</Text>
-                  </TouchableOpacity>
-                </View> */}
               </View>
             </View>
           </SafeAreaView>
@@ -247,7 +237,7 @@ const styles = StyleSheet.create({
     width: width,
     overflow: "hidden",
     // borderRadius: 30,
-    backgroundColor: "red",
+    // backgroundColor: "red",
   },
   scanner: {
     height: height,
@@ -257,27 +247,35 @@ const styles = StyleSheet.create({
     marginTop: "130%",
     height: 250,
     borderWidth: 3,
-    borderColor: "tomato",
+    borderColor: "white",
+    borderTopLeftRadius: 5,
+    borderTopRightRadius: 5,
     backgroundColor: "white",
     alignItems: "center",
     // justifyContent: "center",
   },
+  // hideModal: {
+  //   backgroundColor: "cyan",
+  // },
+  // hideModalBtn: {
+  //   borderWidth: 3,
 
+  // },
   productBlock: {
-    borderWidth: 1,
-    borderColor: "black",
+    // borderWidth: 1,
+    // borderColor: "black",
     flexDirection: "row",
-    height: "100%",
+    height: 200,
   },
   productImageBlock: {
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "green",
+    // backgroundColor: "green",
     flex: 1,
   },
   productInfoBlock: {
     margin: 10,
-    borderWidth: 1,
+    // borderWidth: 1,
     // backgroundColor: "cyan",
     flex: 2,
   },
@@ -288,6 +286,6 @@ const styles = StyleSheet.create({
   productImage: {
     height: 120,
     width: 100,
-    backgroundColor: "chartreuse",
+    // backgroundColor: "chartreuse",
   },
 });

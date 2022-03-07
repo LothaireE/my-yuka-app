@@ -9,6 +9,7 @@ import {
   Platform,
   FlatList,
   TouchableOpacity,
+  ScrollView,
 } from "react-native";
 import { useRoute, useNavigation } from "@react-navigation/core";
 import { useEffect, useState } from "react";
@@ -47,7 +48,7 @@ export default function ProductsScreen() {
     </View>
   ) : (
     <SafeAreaView style={styles.container}>
-      <View style={styles.scrollArea}>
+      <ScrollView style={styles.scrollArea}>
         <View>
           <View style={styles.deleteBtnBlock}>
             <TouchableOpacity
@@ -70,27 +71,6 @@ export default function ProductsScreen() {
               return (
                 <View style={styles.overBlock}>
                   <View>
-                    {/* <TouchableOpacity
-                      onPress={handleAddToFavorite}
-                      style={{
-                        height: 40,
-                        width: width,
-                        backgroundColor: "cyan",
-                        alignItems: "center",
-                        justifyContent: "flex-end",
-                        flexDirection: "row",
-                      }}
-                    >
-                      <Text
-                        style={{
-                          height: 20,
-                          textAlign: "center",
-                          backgroundColor: "red",
-                        }}
-                      >
-                        ajouter au favoris
-                      </Text>
-                    </TouchableOpacity> */}
                     <TouchableOpacity
                       style={styles.productBlock}
                       onPress={() => {
@@ -134,7 +114,7 @@ export default function ProductsScreen() {
             }}
           />
         </View>
-      </View>
+      </ScrollView>
       <StatusBar style="light" />
     </SafeAreaView>
   );
