@@ -10,6 +10,7 @@ import CameraScreen from "./containers/CameraScreen";
 import FavoritesScreen from "./containers/FavoritesScreen";
 import ProductScreen from "./containers/ProductScreen";
 import ProductsScreen from "./containers/ProductsScreen";
+import { Ionicons, Feather } from "@expo/vector-icons";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -25,7 +26,7 @@ export default function App() {
             <Tab.Navigator
               screenOptions={{
                 headerShown: false,
-                tabBarActiveTintColor: "tomato",
+                tabBarActiveTintColor: "#5ECD71",
                 tabBarInactiveTintColor: "gray",
                 unmountOnBlur: true,
               }}
@@ -35,20 +36,33 @@ export default function App() {
                 options={{
                   tabBarLabel: "Camera",
                   unmountOnBlur: true,
+                  tabBarIcon: () => (
+                    <Ionicons name="ios-scan" size={24} color="black" />
+                  ),
                 }}
               >
-                {() => (
+                {(props) => (
                   <Stack.Navigator>
                     <Stack.Screen
                       name="Camera"
                       options={{
                         unmountOnBlur: true,
                       }}
-                      component={CameraScreen}
-                    />
-                    {/* {() => <CameraScreen />} */}
-                    {/* </Stack.Screen> */}
-                    <Stack.Screen name="Product" component={ProductScreen} />
+                      // component={CameraScreen}
+                    >
+                      {() => <CameraScreen {...props} />}
+                    </Stack.Screen>
+                    {/* <Stack.Screen name="Product" component={ProductScreen} /> */}
+                    <Stack.Screen
+                      name="Product"
+                      options={{
+                        title: "Product",
+                        headerStyle: { backgroundColor: "#5ECD71" },
+                        headerTitleStyle: { color: "white" },
+                      }}
+                    >
+                      {() => <ProductScreen {...props} />}
+                    </Stack.Screen>
                   </Stack.Navigator>
                 )}
               </Tab.Screen>
@@ -58,15 +72,38 @@ export default function App() {
                 name="TabProducts"
                 options={{
                   tabBarLabel: "Products",
+                  tabBarIcon: () => (
+                    <Ionicons name="ios-cart-outline" size={24} color="black" />
+                  ),
                 }}
               >
-                {() => (
+                {(props) => (
                   <Stack.Navigator>
-                    <Stack.Screen name="Products" component={ProductsScreen}>
+                    <Stack.Screen
+                      name="Products"
+                      options={{
+                        title: "Products",
+                        headerStyle: { backgroundColor: "#5ECD71" },
+                        headerTitleStyle: { color: "white" },
+                      }}
+                      component={ProductsScreen}
+                    >
                       {/* {() => <ProductsScreen />} */}
                     </Stack.Screen>
                     {/* {() => <ProductScreen />} */}
                     {/* </Stack.Screen> */}
+                    {/* <Stack.Screen name="Product" component={ProductScreen} /> */}
+
+                    <Stack.Screen
+                      name="Product"
+                      options={{
+                        title: "Product",
+                        headerStyle: { backgroundColor: "#5ECD71" },
+                        headerTitleStyle: { color: "white" },
+                      }}
+                    >
+                      {() => <ProductScreen {...props} />}
+                    </Stack.Screen>
                   </Stack.Navigator>
                 )}
               </Tab.Screen>
@@ -74,12 +111,32 @@ export default function App() {
                 name="TabFavorites"
                 options={{
                   tabBarLabel: "Favorites",
+                  tabBarIcon: () => (
+                    <Feather name="star" size={24} color="black" />
+                  ),
                 }}
               >
-                {() => (
+                {(props) => (
                   <Stack.Navigator>
-                    <Stack.Screen name="Favorites">
+                    <Stack.Screen
+                      name="Favorites"
+                      options={{
+                        title: "Favorites",
+                        headerStyle: { backgroundColor: "#5ECD71" },
+                        headerTitleStyle: { color: "white" },
+                      }}
+                    >
                       {() => <FavoritesScreen />}
+                    </Stack.Screen>
+                    <Stack.Screen
+                      name="Product"
+                      options={{
+                        title: "Product",
+                        headerStyle: { backgroundColor: "#5ECD71" },
+                        headerTitleStyle: { color: "white" },
+                      }}
+                    >
+                      {() => <ProductScreen {...props} />}
                     </Stack.Screen>
                   </Stack.Navigator>
                 )}
@@ -100,3 +157,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
+
+{
+  /* <GoBack onPress={() => NavigationContainer.navigate("Products")} */
+}

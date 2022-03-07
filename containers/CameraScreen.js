@@ -152,7 +152,7 @@ export default function CameraScreen() {
         />
       </View>
 
-      <Text>{id}</Text>
+      {/* <Text>{id}</Text> */}
 
       {/* {scanned && (
         <Button
@@ -162,7 +162,13 @@ export default function CameraScreen() {
         />
       )} */}
       {data && (
-        <Modal visible={modal} transparent={true} statusBarTranslucent={true}>
+        <Modal
+          style={styles.modalToggle}
+          animationType="slide"
+          visible={modal}
+          transparent={true}
+          statusBarTranslucent={true}
+        >
           <SafeAreaView style={styles.modalBlock}>
             <View style={styles.productBlock}>
               <TouchableOpacity
@@ -241,10 +247,10 @@ const styles = StyleSheet.create({
     width: width,
     overflow: "hidden",
     // borderRadius: 30,
-    // backgroundColor: "red",
+    backgroundColor: "red",
   },
   scanner: {
-    height: 400,
+    height: height,
     width: width,
   },
   modalBlock: {
