@@ -2,9 +2,6 @@ import { View, Text, StyleSheet } from "react-native";
 import { Octicons } from "@expo/vector-icons";
 
 const SaturatedFatsScore = ({ saturatedFatsNote }) => {
-  //   console.log("energienote==>", energieNote);
-
-  //   console.log("energienote==>", calories);
   if (saturatedFatsNote >= 7) {
     return (
       <View style={styles.noteBlock}>

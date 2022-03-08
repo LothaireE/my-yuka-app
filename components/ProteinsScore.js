@@ -2,10 +2,6 @@ import { View, Text, StyleSheet } from "react-native";
 import { Octicons } from "@expo/vector-icons";
 
 const ProteinsScore = ({ proteinNote }) => {
-  console.log("proteins==", proteinNote);
-
-  // const proteinNote = proteinsNote;
-
   if (proteinNote <= 5) {
     return (
       <View style={styles.noteBlock}>
@@ -50,9 +46,13 @@ const ProteinsScore = ({ proteinNote }) => {
 };
 
 const styles = StyleSheet.create({
+  noteBlock: {
+    alignItems: "flex-end",
+  },
   note: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "flex-end",
   },
   noteResult: {
     color: "#757575",
@@ -62,11 +62,6 @@ const styles = StyleSheet.create({
   noteCom: {
     color: "#757575",
   },
-  // nutriment: {
-  //   color: "#757575",
-  //   fontSize: 20,
-  //   lineHeight: 24,
-  // },
 });
 
 export default ProteinsScore;

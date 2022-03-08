@@ -46,19 +46,20 @@ export default function App() {
                     <Stack.Screen
                       name="Camera"
                       options={{
+                        headerShown: false,
+
                         unmountOnBlur: true,
                       }}
-                      // component={CameraScreen}
                     >
                       {() => <CameraScreen {...props} />}
                     </Stack.Screen>
-                    {/* <Stack.Screen name="Product" component={ProductScreen} /> */}
                     <Stack.Screen
                       name="Product"
                       options={{
-                        title: "Product",
+                        // title: "Product",
                         headerStyle: { backgroundColor: "#5ECD71" },
                         headerTitleStyle: { color: "white" },
+                        unmountOnBlur: true,
                       }}
                     >
                       {() => <ProductScreen {...props} />}
@@ -66,7 +67,6 @@ export default function App() {
                   </Stack.Navigator>
                 )}
               </Tab.Screen>
-              {/* <Stack.Screen name="Product" component={ProductScreen} /> */}
 
               <Tab.Screen
                 name="TabProducts"
@@ -82,22 +82,17 @@ export default function App() {
                     <Stack.Screen
                       name="Products"
                       options={{
-                        title: "Products",
+                        // title: "Products",
                         headerStyle: { backgroundColor: "#5ECD71" },
                         headerTitleStyle: { color: "white" },
                       }}
                       component={ProductsScreen}
-                    >
-                      {/* {() => <ProductsScreen />} */}
-                    </Stack.Screen>
-                    {/* {() => <ProductScreen />} */}
-                    {/* </Stack.Screen> */}
-                    {/* <Stack.Screen name="Product" component={ProductScreen} /> */}
+                    ></Stack.Screen>
 
                     <Stack.Screen
                       name="Product"
                       options={{
-                        title: "Product",
+                        // title: "Product",
                         headerStyle: { backgroundColor: "#5ECD71" },
                         headerTitleStyle: { color: "white" },
                       }}
@@ -121,7 +116,7 @@ export default function App() {
                     <Stack.Screen
                       name="Favorites"
                       options={{
-                        title: "Favorites",
+                        // title: "Favorites",
                         headerStyle: { backgroundColor: "#5ECD71" },
                         headerTitleStyle: { color: "white" },
                       }}
@@ -131,7 +126,7 @@ export default function App() {
                     <Stack.Screen
                       name="Product"
                       options={{
-                        title: "Product",
+                        // title: "Product",
                         headerStyle: { backgroundColor: "#5ECD71" },
                         headerTitleStyle: { color: "white" },
                       }}

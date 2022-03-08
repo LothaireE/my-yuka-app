@@ -10,12 +10,11 @@ import {
   FlatList,
   TouchableOpacity,
 } from "react-native";
-import { useRoute, useNavigation } from "@react-navigation/core";
+import { useNavigation } from "@react-navigation/core";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { StatusBar } from "expo-status-bar";
 import Constants from "expo-constants";
-import { Entypo } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const width = Dimensions.get("window").width;
@@ -26,19 +25,27 @@ export default function FavoritesScreen() {
   const [isLoading, setIsLoading] = useState(true);
   const [favoritesInfos, setFavoritesInfos] = useState();
   const [removeFavorites, setRemoveFavorites] = useState(false);
+  const [removeSingleFavorites, setRemoveSingleFavorites] = useState();
+
+  const handleRemoveSingleItem = async (index) => {
+    const singleRemove = await AsyncStorage.getItem("favorites");
+    const singleRemoveTab = JSON.parse(singleRemove);
+    singleRemoveTab.splice(index, 1);
+    const singleRemoveToString = JSON.stringify(singleRemoveTab);
+    await AsyncStorage.setItem("favorites", singleRemoveToString);
+    setRemoveSingleFavorites(singleRemoveToString);
+  };
 
   useEffect(() => {
     const getFavoritesInfos = async () => {
       const infosValue = await AsyncStorage.getItem("favorites");
-      // console.log("infosValue==>", infosValue);
       const favorites = JSON.parse(infosValue);
-      // console.log("favorites===>", favorites);
       setFavoritesInfos(favorites);
 
       setIsLoading(false);
     };
     getFavoritesInfos();
-  }, [removeFavorites]);
+  }, [removeFavorites, removeSingleFavorites]);
   return isLoading ? (
     <View>
       <ActivityIndicator />
@@ -53,7 +60,6 @@ export default function FavoritesScreen() {
               title="removeFavorites"
               onPress={async () => {
                 await AsyncStorage.removeItem("favorites");
-                console.log("removeFavorites");
                 setRemoveFavorites(true);
               }}
             >
@@ -63,43 +69,25 @@ export default function FavoritesScreen() {
           <FlatList
             data={favoritesInfos}
             keyExtractor={(item) => item._id}
-            renderItem={({ item }) => {
-              // console.log("item._id==>", item._id);
+            renderItem={({ item, index }) => {
               return (
                 <View style={styles.overBlock}>
-                  <View>
-                    {/* <TouchableOpacity
-                      onPress={handleAddToFavorite}
-                      style={{
-                        height: 40,
-                        width: width,
-                        backgroundColor: "cyan",
-                        alignItems: "center",
-                        justifyContent: "flex-end",
-                        flexDirection: "row",
-                      }}
-                    >
-                      <Text
-                        style={{
-                          height: 20,
-                          textAlign: "center",
-                          backgroundColor: "red",
-                        }}
-                      >
-                        ajouter au favoris
-                      </Text>
-                    </TouchableOpacity> */}
+                  <View style={styles.subBlock}>
+                    <View style={styles.binBlock}>
+                      <Ionicons
+                        name="md-trash-outline"
+                        size={24}
+                        // color="#757575"
+                        style={styles.bin}
+                        title="removeSingleFavorite"
+                        onPress={() => handleRemoveSingleItem(index)}
+                      />
+                    </View>
                     <TouchableOpacity
                       style={styles.productBlock}
                       onPress={() => {
                         navigation.navigate("Product", { id: item._id });
                       }}
-                      // onPress={() =>
-                      //   navigation.navigate("TabCamera", {
-                      //     screen: "Product",
-                      //     params: { id: item._id },
-                      //   })
-                      // }
                     >
                       <View style={styles.productImageBlock}>
                         <Image
@@ -110,7 +98,6 @@ export default function FavoritesScreen() {
                           resizeMode="contain"
                         />
                       </View>
-
                       <View style={styles.productInfoBlock}>
                         <View style={styles.productTitleBlock}>
                           <Text style={styles.productNameText}>
@@ -122,9 +109,6 @@ export default function FavoritesScreen() {
                         </View>
                         <View style={styles.scoreBlock}></View>
                       </View>
-                      {/* <Text>{item.product_brand}</Text>
-                  <Text>{item.product_name}</Text>
-                  <Text>{item._id}</Text> */}
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -137,21 +121,15 @@ export default function FavoritesScreen() {
     </SafeAreaView>
   );
 }
-//   return (
-//     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-//       <Text>FavoritesScreen</Text>
-//     </View>
-//   );
-//  }
+
 const styles = StyleSheet.create({
   container: {
-    height: height,
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "white",
     alignItems: "center",
     marginTop: Platform.OS === "android" ? Constants.statusBarHeight : 0,
     height: height,
-    width: width,
+    width: "100%",
   },
   removeFavBlock: {
     alignItems: "flex-end",
@@ -176,12 +154,14 @@ const styles = StyleSheet.create({
   },
 
   overBlock: {
-    // borderWidth: 3,
-    // borderColor: "yellow",
-    // backgroundColor: "cyan",
     alignItems: "center",
-    flexDirection: "row",
-    marginVertical: 5,
+    justifyContent: "center",
+    margin: 10,
+  },
+  subBlock: {
+    width: "100%",
+    backgroundColor: "white",
+    margin: 10,
   },
   productBlock: {
     borderBottomColor: "#A9A9A9",
@@ -217,5 +197,13 @@ const styles = StyleSheet.create({
     color: "#757575",
     fontSize: 16,
     lineHeight: 20,
+  },
+  binBlock: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+  },
+  bin: {
+    marginRight: 20,
+    color: "#757575",
   },
 });

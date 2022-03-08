@@ -2,10 +2,6 @@ import { View, Text, StyleSheet } from "react-native";
 import { Octicons } from "@expo/vector-icons";
 
 const FibersScore = ({ fiberNote }) => {
-  console.log("fiberNote==", fiberNote);
-
-  // const proteinNote = proteinsNote;
-
   if (fiberNote <= 1) {
     return (
       <View style={styles.noteBlock}>
@@ -50,9 +46,13 @@ const FibersScore = ({ fiberNote }) => {
 };
 
 const styles = StyleSheet.create({
+  noteBlock: {
+    alignItems: "flex-end",
+  },
   note: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "flex-end",
   },
   noteResult: {
     color: "#757575",
@@ -62,11 +62,6 @@ const styles = StyleSheet.create({
   noteCom: {
     color: "#757575",
   },
-  // nutriment: {
-  //   color: "#757575",
-  //   fontSize: 20,
-  //   lineHeight: 24,
-  // },
 });
 
 export default FibersScore;

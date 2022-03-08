@@ -9,11 +9,13 @@ import {
   SafeAreaView,
   Modal,
   TouchableOpacity,
+  Platform,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
 import * as ImagePicker from "expo-image-picker";
 import { BarCodeScanner } from "expo-barcode-scanner";
+import Constants from "expo-constants";
 
 import axios from "axios";
 import { Ionicons, AntDesign } from "@expo/vector-icons";
@@ -32,15 +34,9 @@ export default function CameraScreen() {
   const [data, setData] = useState();
   const [modal, setModal] = useState(false);
 
-  //   const handleGoBack = () => {
-  //     setModal(false);
-  //     setScanned(false);
-  //   };
-
   const getCameraPermission = () => {
     (async () => {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
-      //   const { status } = await Camera.requestPermissionsAsync();
       setPermission(status === `granted`);
     })();
   };
@@ -79,20 +75,14 @@ export default function CameraScreen() {
       } else {
         const callHistory = await AsyncStorage.getItem("products");
         const rebuiltHistory = JSON.parse(callHistory);
-        // console.log("rebuiltHistory==>", rebuiltHistory);
 
         const idFound = rebuiltHistory.find((product) => {
-          //   console.log(" product==>", product._id);
-
           if (response.data.product._id === product._id) {
-            // console.log("already here");
             return true;
           } else {
-            // console.log("new entry");
             return false;
           }
         });
-        console.log("idFound", idFound);
 
         if (idFound) {
           console.log("product already registered");
@@ -119,10 +109,6 @@ export default function CameraScreen() {
     return (
       <SafeAreaView style={styles.container}>
         <Text>Requesting for camera permission</Text>
-        {/* <Button
-          title="Accéder à l'appareil photo"
-          onPress={getPermissionAndTakePicture}
-        /> */}
       </SafeAreaView>
     );
   }
@@ -138,30 +124,14 @@ export default function CameraScreen() {
       </SafeAreaView>
     );
   }
-
   return (
     <SafeAreaView style={styles.container}>
-      {/* <Text>CameraScreen</Text> */}
       <View style={styles.bareCodeBox}>
-        {/* <Camera
-          onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-          style={styles.scanner}
-        /> */}
         <BarCodeScanner
           onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
           style={styles.scanner}
         />
       </View>
-
-      {/* <Text>{id}</Text> */}
-
-      {/* {scanned && (
-        <Button
-          title={"Scan again?"}
-          onPress={() => setScanned(false)}
-          color="tomato"
-        />
-      )} */}
       {data && (
         <Modal
           style={styles.modalToggle}
@@ -188,8 +158,6 @@ export default function CameraScreen() {
             <View style={styles.productBlock}>
               <TouchableOpacity
                 onPress={() => {
-                  // navigation.navigate("Product", { id: data.product._id });
-
                   navigation.navigate("Product", { id: id });
                 }}
                 style={styles.productImageBlock}
@@ -218,6 +186,7 @@ export default function CameraScreen() {
           </SafeAreaView>
         </Modal>
       )}
+      <StatusBar style="dark" />
     </SafeAreaView>
   );
 }
@@ -225,23 +194,19 @@ export default function CameraScreen() {
 const styles = StyleSheet.create({
   container: {
     height: height,
+    width: width,
     flex: 1,
-    backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+    marginTop: Platform.OS === "android" ? Constants.statusBarHeight : 0,
   },
   bareCodeBox: {
-    // alignItems: "center",
-    // justifyContent: "center",
-    // height: "80%",
-    width: width,
+    width: "100%",
     overflow: "hidden",
-    // borderRadius: 30,
-    // backgroundColor: "red",
   },
   scanner: {
-    height: height,
     width: width,
+    height: "100%",
   },
   modalBlock: {
     marginTop: "130%",
@@ -252,31 +217,19 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 5,
     backgroundColor: "white",
     alignItems: "center",
-    // justifyContent: "center",
   },
-  // hideModal: {
-  //   backgroundColor: "cyan",
-  // },
-  // hideModalBtn: {
-  //   borderWidth: 3,
 
-  // },
   productBlock: {
-    // borderWidth: 1,
-    // borderColor: "black",
     flexDirection: "row",
     height: 200,
   },
   productImageBlock: {
     alignItems: "center",
     justifyContent: "center",
-    // backgroundColor: "green",
     flex: 1,
   },
   productInfoBlock: {
     margin: 10,
-    // borderWidth: 1,
-    // backgroundColor: "cyan",
     flex: 2,
   },
   productNameText: {
@@ -286,6 +239,5 @@ const styles = StyleSheet.create({
   productImage: {
     height: 120,
     width: 100,
-    // backgroundColor: "chartreuse",
   },
 });

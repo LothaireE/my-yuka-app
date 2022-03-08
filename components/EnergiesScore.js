@@ -2,10 +2,7 @@ import { View, Text, StyleSheet } from "react-native";
 import { Octicons } from "@expo/vector-icons";
 
 const EnergiesScore = ({ energieNote }) => {
-  //   console.log("energienote==>", energieNote);
-
   const calories = Math.round(energieNote / 4.18);
-  //   console.log("energienote==>", calories);
   if (calories >= 800) {
     return (
       <View style={styles.noteBlock}>

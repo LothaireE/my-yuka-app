@@ -9,16 +9,12 @@ import {
   Platform,
   FlatList,
   TouchableOpacity,
-  ScrollView,
 } from "react-native";
-import { useRoute, useNavigation } from "@react-navigation/core";
+import { useNavigation } from "@react-navigation/core";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { StatusBar } from "expo-status-bar";
 import Constants from "expo-constants";
-import { Entypo } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { borderColor } from "react-native/Libraries/Components/View/ReactNativeStyleAttributes";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -32,11 +28,8 @@ export default function ProductsScreen() {
   useEffect(() => {
     const getProductInfos = async () => {
       const infosValue = await AsyncStorage.getItem("products");
-      // console.log("infosValue==>", infosValue);
       const products = JSON.parse(infosValue);
-      // console.log("products===>", products);
       setProductInfos(products);
-
       setIsLoading(false);
     };
     getProductInfos();
@@ -48,7 +41,7 @@ export default function ProductsScreen() {
     </View>
   ) : (
     <SafeAreaView style={styles.container}>
-      <ScrollView style={styles.scrollArea}>
+      <View style={styles.scrollArea}>
         <View>
           <View style={styles.deleteBtnBlock}>
             <TouchableOpacity
@@ -56,7 +49,7 @@ export default function ProductsScreen() {
               title="removeStorage"
               onPress={async () => {
                 await AsyncStorage.removeItem("products");
-                console.log("removeStorage");
+                // console.log("removeStorage");
                 setRemoveHistory(true);
               }}
             >
@@ -67,7 +60,7 @@ export default function ProductsScreen() {
             data={productInfos}
             keyExtractor={(item) => item._id}
             renderItem={({ item }) => {
-              // console.log("item._id==>", item._id);
+              // console.log("item==>", item);
               return (
                 <View style={styles.overBlock}>
                   <View>
@@ -76,12 +69,6 @@ export default function ProductsScreen() {
                       onPress={() => {
                         navigation.navigate("Product", { id: item._id });
                       }}
-                      // onPress={() =>
-                      //   navigation.navigate("TabCamera", {
-                      //     screen: "Product",
-                      //     params: { id: item._id },
-                      //   })
-                      // }
                     >
                       <View style={styles.productImageBlock}>
                         <Image
@@ -104,9 +91,6 @@ export default function ProductsScreen() {
                         </View>
                         <View style={styles.scoreBlock}></View>
                       </View>
-                      {/* <Text>{item.product_brand}</Text>
-                  <Text>{item.product_name}</Text>
-                  <Text>{item._id}</Text> */}
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -114,7 +98,7 @@ export default function ProductsScreen() {
             }}
           />
         </View>
-      </ScrollView>
+      </View>
       <StatusBar style="light" />
     </SafeAreaView>
   );
@@ -129,12 +113,9 @@ const styles = StyleSheet.create({
     marginTop: Platform.OS === "android" ? Constants.statusBarHeight : 0,
     height: height,
     width: width,
-    // justifyContent: "center",
   },
   deleteBtnBlock: {
     alignItems: "flex-end",
-    // borderWidth: 2,
-    // borderColor: "black",
     width: width,
     marginVertical: 5,
   },
@@ -156,9 +137,6 @@ const styles = StyleSheet.create({
     color: "white",
   },
   overBlock: {
-    // borderWidth: 3,
-    // borderColor: "yellow",
-    // backgroundColor: "cyan",
     alignItems: "center",
     flexDirection: "row",
     marginVertical: 5,
@@ -175,13 +153,11 @@ const styles = StyleSheet.create({
   productImageBlock: {
     alignItems: "center",
     justifyContent: "center",
-    // backgroundColor: "green",
     flex: 1,
   },
   productImage: {
     height: 120,
     width: 100,
-    // backgroundColor: "chartreuse",
   },
   productInfoBlock: {
     margin: 10,

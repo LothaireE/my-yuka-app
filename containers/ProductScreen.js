@@ -40,8 +40,6 @@ export default function ProductScreen({ navigation }) {
   const [data, setData] = useState({});
   const [isLoading, setIsLoading] = useState(true);
 
-  // console.log("data.nutriscore_grade ==>", data.product.nutriments);
-
   const handleAddToFavorite = async () => {
     const favoriteTabExist = await AsyncStorage.getItem("favorites");
 
@@ -53,6 +51,11 @@ export default function ProductScreen({ navigation }) {
         product_picture: data.product.image_front_small_url,
         product_name: data.product.product_name_fr,
         product_brand: data.product.brands,
+        // product_proteins: data.product.nutriscore_data.proteins,
+        // product_fiber: data.product.nutriscore_data.fiber,
+        // product_energy: data.product.nutriscore_data.energy,
+        // product_saturated_fat: data.product.nutriscore_data.saturated_fat,
+        // product_sugars: data.product.nutriscore_data.sugars,
       });
       const newFavoriteTabToString = JSON.stringify(newFavoriteTab);
       await AsyncStorage.setItem("favorites", newFavoriteTabToString);
@@ -79,11 +82,15 @@ export default function ProductScreen({ navigation }) {
           product_picture: data.product.image_front_small_url,
           product_name: data.product.product_name_fr,
           product_brand: data.product.brands,
+          // product_proteins: data.product.nutriscore_data.proteins,
+          // product_fiber: data.product.nutriscore_data.fiber,
+          // product_energy: data.product.nutriscore_data.energy,
+          // product_saturated_fat: data.product.nutriscore_data.saturated_fat,
+          // product_sugars: data.product.nutriscore_data.sugars,
         });
         const favoriteTabToString = JSON.stringify(favoriteTab);
         await AsyncStorage.setItem("favorites", favoriteTabToString);
       }
-      // console.log("productscreen idFound ===>", idFound);
     }
   };
 
@@ -99,16 +106,13 @@ export default function ProductScreen({ navigation }) {
     fetchData();
   }, []);
 
-  // console.log("data.nutriscore_grade ==>", data.product.nutriments);
-
   return isLoading ? (
-    // <Text>lottie view soon</Text>
     <View>
       <ActivityIndicator />
     </View>
   ) : (
     <SafeAreaView style={styles.container}>
-      <View style={styles.productBlock}>
+      <ScrollView style={styles.productBlock}>
         <View style={styles.productBlockTop}>
           <Image
             source={{
@@ -246,18 +250,10 @@ export default function ProductScreen({ navigation }) {
         </View>
         <View style={styles.addToFavBlock}>
           <TouchableOpacity style={styles.favBtn} onPress={handleAddToFavorite}>
-            <Text style={styles.favBtnText}>ajouter au favoris</Text>
+            <Text style={styles.favBtnText}>Ajouter au favoris</Text>
           </TouchableOpacity>
         </View>
-
-        <TouchableOpacity
-          style={styles.goBackBtn}
-          title="Go back"
-          onPress={() => navigation.goBack()}
-        >
-          <Text style={styles.goBackBtnText}>Retour</Text>
-        </TouchableOpacity>
-      </View>
+      </ScrollView>
 
       <StatusBar style="light" />
     </SafeAreaView>
@@ -267,32 +263,27 @@ export default function ProductScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     height: height,
-    width: width,
+    width: "100%",
     flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
+    justifyContent: "center",
     marginTop: Platform.OS === "android" ? Constants.statusBarHeight : 0,
   },
   productBlock: {
     height: height,
     width: "95%",
-    // borderWidth: 3,
-    // borderColor: "red",
   },
   bareCodeBox: {
     alignItems: "center",
     justifyContent: "center",
     height: "80%",
-    // width: width,
     overflow: "hidden",
     borderRadius: 30,
-    // backgroundColor: "red",
   },
 
   // ******************** productBlockTop ********************
   productBlockTop: {
-    // borderWidth: 1,
-    // borderColor: "chartreuse",
     flexDirection: "row",
     alignItems: "center",
     height: 200,
@@ -300,13 +291,10 @@ const styles = StyleSheet.create({
   productImageBlock: {
     alignItems: "flex-start",
     justifyContent: "center",
-    // backgroundColor: "green",
     flex: 1,
   },
   productInfoBlock: {
     margin: 10,
-    // borderWidth: 1,
-    // borderColor: "green",
     flex: 2,
   },
   productNameText: {
@@ -321,15 +309,12 @@ const styles = StyleSheet.create({
   productImage: {
     height: 120,
     width: 100,
-    // backgroundColor: "chartreuse",
   },
 
   // ************   productBlockBottom ************
 
   productBlockBottom: {
-    // borderWidth: 4,
-    // borderColor: "red",
-    // marginVertical: 5,
+    marginVertical: 5,
   },
 
   // ************ nutrimentBlock ************
@@ -342,18 +327,13 @@ const styles = StyleSheet.create({
   nutrimentSubBlock: {
     flexDirection: "row",
     justifyContent: "space-between",
-    // borderWidth: 2,
-    // borderColor: "black",
     flex: 4,
     marginBottom: 10,
     borderBottomColor: "#757575",
     borderBottomWidth: 1,
-    // marginRight: 5,
   },
   nutriIcon: {
     justifyContent: "center",
-    // borderWidth: 2,
-    // borderColor: "black",
     flex: 1,
     color: "#757575",
     paddingLeft: 20,
@@ -370,29 +350,30 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
   addToFavBlock: {
-    height: 40,
-    width: width,
-    // backgroundColor: "red",
+    width: "100%",
+
     alignItems: "center",
-    justifyContent: "flex-end",
-    flexDirection: "row",
-  },
-  // goBackBtn: {
-  //   borderWidth: 2,
-  // },
-  goBackBtnText: {
-    fontSize: 20,
+    justifyContent: "center",
+    flexDirection: "column",
+    paddingBottom: 30,
   },
   favBtn: {
     borderWidth: 1,
-    borderRadius: 5,
-    borderColor: "#5ECD71",
-    backgroundColor: "#5ECD71",
-    marginRight: 15,
+    borderBottomLeftRadius: 5,
+    borderTopLeftRadius: 5,
+    borderBottomRightRadius: 5,
+    borderTopRightRadius: 5,
+    borderColor: "#323232",
+    backgroundColor: "#323232",
+    width: "90%",
+    height: 30,
+    alignItems: "center",
+    justifyContent: "center",
   },
   favBtnText: {
     height: 20,
     textAlign: "center",
     color: "white",
+    fontSize: 16,
   },
 });

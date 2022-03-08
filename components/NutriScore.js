@@ -10,7 +10,6 @@ const NutriScore = (nutriscore) => {
 
   const result = 100 - Math.floor(kcal + fat + fiber + proteins + sugar);
 
-  console.log(result);
   if (result <= 25) {
     return (
       <View style={styles.noteBlock}>

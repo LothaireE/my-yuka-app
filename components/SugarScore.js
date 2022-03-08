@@ -2,9 +2,6 @@ import { View, Text, StyleSheet } from "react-native";
 import { Octicons } from "@expo/vector-icons";
 
 const SugarScore = ({ sugarNote }) => {
-  //   console.log("energienote==>", energieNote);
-
-  //   console.log("energienote==>", calories);
   if (sugarNote >= 31) {
     return (
       <View style={styles.noteBlock}>
